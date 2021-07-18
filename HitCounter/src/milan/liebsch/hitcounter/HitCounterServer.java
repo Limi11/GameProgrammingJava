@@ -22,6 +22,7 @@ public class HitCounterServer {
 	
 	// constructor of class hitcounterserver
 	public HitCounterServer() {
+		
 		// information that the server is running on console
 		System.out.println("Server is running!");
 		// we need to handle IOExceptions

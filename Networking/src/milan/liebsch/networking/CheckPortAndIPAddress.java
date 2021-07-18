@@ -4,6 +4,7 @@ package milan.liebsch.networking;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.io.IOException;
+import java.net.ServerSocket;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -11,7 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import milan.liebsch.mycomponents.*;
+import milan.liebsch.networking.*;
 
 public class CheckPortAndIPAddress extends JFrame {
 	// the serialVersionUID is used on deserialization to verify if the data is valid
@@ -34,6 +35,17 @@ public class CheckPortAndIPAddress extends JFrame {
 		setVisible(true);
 		// exit on close is a good idea
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// get port number
+		// creating a server socket at port 0 connects to a random available port
+		try {
+			ServerSocket serverSocket = new ServerSocket(0);
+			int port = serverSocket.getLocalPort();
+			serverSocket.close();
+			infoArea.setText("Port: " + port);
+		}
+		catch(Exception e) {
+			infoArea.setText(e.getMessage());
+		}
 	}
 	
 	
@@ -55,14 +67,14 @@ public class CheckPortAndIPAddress extends JFrame {
 			// nothing todo
 		}
 		
-		
+		// The Swing library and AWT (abstract window toolkit) is not threadsave and all it methods should run on the Event Dispatch Thread (EDT)
+		// with with the SwingUtilities.invokeLater(...) function we pass a runnable to the  Event Dispatch Thread (EDT) where these applications should run on
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run() {
+				// we wand to run the CheckPortAndIPAddress class constructor on the EDT
 				new CheckPortAndIPAddress();
 			}
 		});
-	
-		CheckPortAndIPAddress test = new CheckPortAndIPAddress();
 
 	}
 
