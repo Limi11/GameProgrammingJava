@@ -78,6 +78,7 @@ public class CheckPortAndIPAddress extends JFrame {
 			this.url = new URL("http://checkip.amazonaws.com/");
 			// instantiate bufferedreader object "in" using an inputstream reader object created by opening a stream to url
 			this.in = new BufferedReader(new InputStreamReader(this.url.openStream()));
+			// read input stream into string publicIPAddress
 			this.publicIPAddress = in.readLine();
 			// print port, hostname and privateIPAddress into the infoArea
 			infoArea.setText("Port: " + this.port + "\n" + "Hostname: " + this.hostname + "\n" + "Private IPAddress: " + this.privateIPAddress + "\n" + "Public IPAddress: " + this.publicIPAddress);
