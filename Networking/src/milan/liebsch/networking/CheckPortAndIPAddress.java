@@ -3,9 +3,12 @@ package milan.liebsch.networking;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -33,6 +36,15 @@ public class CheckPortAndIPAddress extends JFrame {
 	
 	// attribute for the port number
 	private int port;
+	
+	// attribute for url address
+	private URL url;
+	
+	// 
+	private BufferedReader in;
+	
+	//
+	private String publicIPAddress;
 	
 	
 	// constructor
@@ -62,8 +74,13 @@ public class CheckPortAndIPAddress extends JFrame {
 			this.hostname = this.host.getHostName();
 			// use InetAddress object host to get the local IPAddress
 			this.privateIPAddress = this.host.getHostAddress();
+			// instantiate url object with address http://checkip.amazonaws.com/ to check public ip address
+			this.url = new URL("http://checkip.amazonaws.com/");
+			// instantiate bufferedreader object "in" using an inputstream reader object created by opening a stream to url
+			this.in = new BufferedReader(new InputStreamReader(this.url.openStream()));
+			this.publicIPAddress = in.readLine();
 			// print port, hostname and privateIPAddress into the infoArea
-			infoArea.setText("Port: " + this.port + "\n" + "Hostname: " + this.hostname + "\n" + "IPAddress: " + this.privateIPAddress);
+			infoArea.setText("Port: " + this.port + "\n" + "Hostname: " + this.hostname + "\n" + "Private IPAddress: " + this.privateIPAddress + "\n" + "Public IPAddress: " + this.publicIPAddress);
 			// don't forgett to close the server socket!
 			serverSocket.close();
 		}
