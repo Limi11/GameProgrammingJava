@@ -4,6 +4,7 @@ package milan.liebsch.networking;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 
 import javax.swing.JFrame;
@@ -20,6 +21,19 @@ public class CheckPortAndIPAddress extends JFrame {
 
 	// new text area with 6 rows and 25 columns (25 columns means the width will be 25 characters wide)
 	public JTextArea infoArea = new JTextArea(6, 25);
+	
+	// InetAddress object is used to get the IP address of the local host
+	private InetAddress host; 
+	
+	// attribute for local hostname
+	private String hostname;
+	
+	// attribute for local IPAddress
+	private String privateIPAddress; 
+	
+	// attribute for the port number
+	private int port;
+	
 	
 	// constructor
 	public CheckPortAndIPAddress() {
@@ -38,10 +52,20 @@ public class CheckPortAndIPAddress extends JFrame {
 		// get port number
 		// creating a server socket at port 0 connects to a random available port
 		try {
+			// init a new ServerSocket object with free random port
 			ServerSocket serverSocket = new ServerSocket(0);
-			int port = serverSocket.getLocalPort();
+			// save the chosen port number into the port attribute
+			this.port = serverSocket.getLocalPort();
+			// class InetAddress is used to get local host InetAddress object
+			this.host = InetAddress.getLocalHost();
+			// use InetAddress object host to get the local hostname
+			this.hostname = this.host.getHostName();
+			// use InetAddress object host to get the local IPAddress
+			this.privateIPAddress = this.host.getHostAddress();
+			// print port, hostname and privateIPAddress into the infoArea
+			infoArea.setText("Port: " + this.port + "\n" + "Hostname: " + this.hostname + "\n" + "IPAddress: " + this.privateIPAddress);
+			// don't forgett to close the server socket!
 			serverSocket.close();
-			infoArea.setText("Port: " + port);
 		}
 		catch(Exception e) {
 			infoArea.setText(e.getMessage());
