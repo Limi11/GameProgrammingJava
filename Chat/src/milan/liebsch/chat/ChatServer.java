@@ -2,6 +2,8 @@ package milan.liebsch.chat;
 
 import javax.swing.JFrame;
 
+import milan.liebsch.mycomponents.TitleLabel;
+
 public class ChatServer extends JFrame {
 	private static final long serialVersionuID = 1L;
 	
@@ -21,7 +23,7 @@ public class ChatServer extends JFrame {
 	
 
 	private void initGUI() {
-		// TODO Auto-generated method stub
+		TitleLabel titleLabel = new TitleLabel("Chat Server");
 		
 	}
 
