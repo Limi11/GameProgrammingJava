@@ -2,13 +2,19 @@ package milan.liebsch.chat;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import milan.liebsch.mycomponents.TitleLabel;
+import milan.liebsch.networking.CheckPortAndIPAddress;
 
 public class ChatServer extends JFrame {
 	private static final long serialVersionuID = 1L;
+	private JTextArea logArea = new JTextArea(10,30);
+	private JButton startButton = new JButton("start");
 	
 	public ChatServer() {
 		// own method for gui initialization
@@ -43,6 +49,16 @@ public class ChatServer extends JFrame {
 		catch(Exception e) {
 			// nothing todo until now
 		}
+		// SwingUtilities is a collection of utility methods for Swing 
+		// We create an instance of an anonymous implementation of the Runnable
+		// interface and passing it to invokeLater, which will put it on a queue for
+		// the Event Dispatch Thread, which will invoke the Runnable  
+		// we use the class Runnable to create an anonymous class and overright the run() method 
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new CheckPortAndIPAddress();
+			}
+		});
 		ChatServer test = new ChatServer();
 	}
 
