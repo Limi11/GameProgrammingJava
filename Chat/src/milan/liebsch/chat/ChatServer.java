@@ -3,6 +3,8 @@ package milan.liebsch.chat;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -66,13 +68,24 @@ public class ChatServer extends JFrame {
 		startButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//startServer();
+				startServer();
 			}
 		});
 		// add the startButton to the buttonPanel
 		buttonPanel.add(startButton);
 		// set the startButton as the default Button of the root layer 
 		getRootPane().setDefaultButton(startButton);
+	}
+	
+	private void startServer() {
+		startButton.disable();
+	}
+	
+	public void log(String message) {
+		Date time = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy,HH:mm;:ss");
+		String timeStamp = dateFormat.format(dateFormat);
+		logArea.append(timeStamp + message + "\n");
 	}
 
 
