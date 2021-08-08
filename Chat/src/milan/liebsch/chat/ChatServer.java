@@ -84,7 +84,7 @@ public class ChatServer extends JFrame {
 	public void log(String message) {
 		Date time = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy,HH:mm;:ss");
-		String timeStamp = dateFormat.format(dateFormat);
+		String timeStamp = dateFormat.format(time);
 		logArea.append(timeStamp + message + "\n");
 	}
 
