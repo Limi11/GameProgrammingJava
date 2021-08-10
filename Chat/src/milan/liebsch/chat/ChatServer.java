@@ -124,7 +124,7 @@ public class ChatServer extends JFrame implements Runnable {
 			log("Exception caught while trying to listen on port PORT_NUMBER");
 			log(e.toString());
 		}
-		/*
+		
 		finally {
 			try {
 				if(serverSocket.isClosed() != true) {
@@ -134,7 +134,7 @@ public class ChatServer extends JFrame implements Runnable {
 			catch(Exception e) {
 			// nothing todo	
 			}
-		}*/
+		}
 	}
 	
 	// methd to add timestamp to log message
