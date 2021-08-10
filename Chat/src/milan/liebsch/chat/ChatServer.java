@@ -3,6 +3,10 @@ package milan.liebsch.chat;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,10 +23,13 @@ import javax.swing.text.DefaultCaret;
 import milan.liebsch.mycomponents.TitleLabel;
 import milan.liebsch.networking.CheckPortAndIPAddress;
 
-public class ChatServer extends JFrame {
+public class ChatServer extends JFrame implements Runnable {
+	
 	private static final long serialVersionuID = 1L;
 	private JTextArea logArea = new JTextArea(10,30);
 	private JButton startButton = new JButton("start");
+	private static final int PORT_NUMBER = 49688;
+	private ServerSocket serverSocket;
 	
 	public ChatServer() {
 		// own method for gui initialization
@@ -35,9 +42,10 @@ public class ChatServer extends JFrame {
 		setLocationRelativeTo(null);
 		// we need to set the Frame visible
 		setVisible(true);	
+		// set default close operation to do nothing when closed
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 	
-
 	private void initGUI() {
 		// new instance of a titleLabel we want to use
 		TitleLabel titleLabel = new TitleLabel("Chat Server");
@@ -75,19 +83,71 @@ public class ChatServer extends JFrame {
 		buttonPanel.add(startButton);
 		// set the startButton as the default Button of the root layer 
 		getRootPane().setDefaultButton(startButton);
+		// listeners
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent a) {
+				stop();
+				System.exit(0);
+			}
+		});
 	}
 	
 	private void startServer() {
-		startButton.disable();
+		startButton.setEnabled(false);
+		new Thread(this).start();
 	}
 	
-	public void log(String message) {
-		Date time = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy,HH:mm;:ss");
-		String timeStamp = dateFormat.format(time);
-		logArea.append(timeStamp + message + "\n");
+	private void stop() {
+		if(serverSocket != null && !serverSocket.isClosed()) {
+			try {
+				serverSocket.close();
+			}
+			catch(Exception e) {
+				log("Program unable to close server");
+				log(e.toString());
+			}
+		}
 	}
-
+	
+	// each time ther server is started, connect to the PORT_NUMBER and then endlessly linsten for clients
+	public void run() {
+		log("The server is running.");
+		
+		try {
+			serverSocket = new ServerSocket(PORT_NUMBER);
+			while(true) {
+				Socket socket = serverSocket.accept();
+				log("There is a new connection, startet!");
+			}
+		}
+		catch(Exception e) {
+			log("Exception caught while trying to listen on port PORT_NUMBER");
+			log(e.toString());
+		}
+		/*
+		finally {
+			try {
+				if(serverSocket.isClosed() != true) {
+					serverSocket.close();
+				}
+			}
+			catch(Exception e) {
+			// nothing todo	
+			}
+		}*/
+	}
+	
+	// methd to add timestamp to log message
+	public void log(String message) {
+		// instantiate new date object
+		Date time = new Date();
+		// intsantiate ne SinmpleDateFormat object
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy,HH:mm:ss:");
+		// save current time in SimpleDateFormat format in timeStamp
+		String timeStamp = dateFormat.format(time);
+		// create log message
+		logArea.append(timeStamp + "   " + message + "\n");
+	}
 
 
 	public static void main(String[] args) {
